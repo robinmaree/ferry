@@ -1,0 +1,51 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+<section class="blog-single-hero section-padding">
+  <div class="container">
+    <div class="blog-single-header text-center">
+      {{ with .Params.category }}
+      <a href="{{ "blog/" | relLangURL }}" class="blog-single-category">{{ . }}</a>
+      {{ end }}
+      <h1 class="blog-single-title">{{ .Title }}</h1>
+      {{ with or .Params.intro .Params.description .Summary }}
+      <div class="blog-single-intro">{{ . }}</div>
+      {{ end }}
+      {{ if or .Params.author .Date }}
+      <div class="blog-single-meta">
+        <div class="blog-single-author">
+          {{ with .Params.author }}<span class="me-2">Geschreven door {{ . }}</span>{{ end }}
+          {{ with .Date }}<span>{{ .Format "2 januari 2006" }}</span>{{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="news-standard fix section-padding pt-0">
+  <div class="container">
+    <div class="news-details-area">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <div class="blog-post-details">
+            <div class="single-blog-post">
+              {{ with .Params.image }}
+              <div class="post-featured-image mb-4 w-100">
+                <img src="{{ cond (hasPrefix . "http") . (. | relURL) }}" alt="{{ $.Title }}" class="img-fluid w-100 rounded-4" fetchpriority="high" loading="eager">
+              </div>
+              {{ end }}
+              <div class="post-content">
+                <div class="post-body markdown-body">{{ .Content }}</div>
+              </div>
+              <div class="mt-4">
+                <a href="{{ "blog/" | relLangURL }}" class="theme-btn-2">Terug naar blog <i class="fa-solid fa-arrow-right-long"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

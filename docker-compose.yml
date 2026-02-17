@@ -1,0 +1,13 @@
+services:
+  ferry:
+    image: ferry:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - ./public:/srv
+
+volumes:
+  caddy_data:

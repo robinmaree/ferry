@@ -1,0 +1,75 @@
+<footer class="footer-section footer-bg">
+  <div class="container">
+    <div class="contact-info-area">
+      <div class="contact-info-items wow slideUp" data-delay=".3">
+        <div class="content">
+          <p></p>
+          <h3><a href=""></a></h3>
+        </div>
+      </div>
+      <div class="contact-info-items wow slideUp" data-delay=".5">
+        <div class="content">
+          <p>Stuur ons een e-mail</p>
+          <h3><a href="mailto:info@ferrydirect.nl">info@ferrydirect.nl</a></h3>
+        </div>
+      </div>
+      <div class="contact-info-items wow slideUp" data-delay=".7">
+        <div class="content">
+          <p></p>
+          <h3></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-widgets-wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-3 col-lg-4 col-md-6 wow slideUp" data-delay=".3">
+          <div class="single-footer-widget">
+            <div class="widget-head">
+              <a href="{{ "" | relLangURL }}">
+                <img src="/img/logo/white-logo.svg" alt="FerryDirect" width="170" height="43" />
+              </a>
+            </div>
+            <div class="footer-content">
+              <p>De beste ferries vind je op FerryDirect.nl.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-4 col-md-6 ps-lg-5 wow slideUp" data-delay=".5">
+          <div class="single-footer-widget">
+            <div class="widget-head"><h3>Links</h3></div>
+            <ul class="list-area">
+              <li><a href="{{ "over-ons/" | relLangURL }}"><i class="fa-solid fa-chevron-right"></i> Over ons</a></li>
+              <li><a href="{{ "blog/" | relLangURL }}"><i class="fa-solid fa-chevron-right"></i> Blog</a></li>
+              <li><a href="{{ "bestemmingen/" | relLangURL }}"><i class="fa-solid fa-chevron-right"></i> Bestemmingen</a></li>
+              <li><a href="{{ "contact/" | relLangURL }}"><i class="fa-solid fa-chevron-right"></i> Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-6 wow slideUp" data-delay=".7">
+          <div class="single-footer-widget style-margin">
+            <div class="widget-head"><h3>Recente Blogs</h3></div>
+            <div class="recent-post-area">
+              {{ range first 2 (where .Site.RegularPages "Section" "blog") }}
+              <div class="recent-post-items">
+                <div class="content">
+                  <h6><a href="{{ .Permalink }}">{{ .Title }}</a></h6>
+                </div>
+              </div>
+              {{ end }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom style-2">
+    <div class="container">
+      <div class="footer-wrapper d-flex align-items-center justify-content-center">
+        <p class="wow slideLeft color-2" data-delay=".3">© {{ now.Year }} <a href="{{ "" | relLangURL }}">FerryDirect.nl</a></p>
+      </div>
+    </div>
+    <a href="#" id="scrollUp" class="scroll-icon"><i class="fa fa-arrow-up"></i></a>
+  </div>
+</footer>

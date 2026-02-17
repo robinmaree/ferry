@@ -1,0 +1,44 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+{{ if ne .Section "blog" }}{{ partial "page-title.html" . }}{{ end }}
+<section class="news-standard fix section-padding">
+  <div class="container">
+    <div class="news-details-area">
+      <div class="row g-5">
+        <div class="col-12 col-lg-8">
+          <div class="blog-post-details">
+            <div class="single-blog-post">
+              {{ if eq .Section "blog" }}
+              <ul class="post-list d-flex align-items-center flex-wrap gap-2">
+                {{ with .Params.author }}<li><i class="fa-regular fa-user"></i> Door {{ . }}</li>{{ end }}
+                {{ with .Date }}<li><i class="fa-solid fa-calendar-days"></i> {{ .Format "2 January 2006" }}</li>{{ end }}
+                {{ with .Params.category }}<li><i class="fa-solid fa-tag"></i> {{ . }}</li>{{ end }}
+              </ul>
+              {{ end }}
+              {{ if eq .Section "products" }}
+                {{ with .Params.image }}<div class="post-featured-thumb bg-cover mb-4" style="background-image: url('{{ . }}')"></div>{{ end }}
+                {{ with .Params.category }}<p class="text-muted mb-2"><i class="fa-solid fa-tag me-2"></i>{{ . }}</p>{{ end }}
+                {{ with .Params.price }}<p class="h4 text-success mb-3">{{ . }}</p>{{ end }}
+                {{ with .Params.description }}<p class="lead">{{ . }}</p>{{ end }}
+              {{ end }}
+              <div class="post-content">
+                <div class="post-body markdown-body">{{ .Content }}</div>
+              </div>
+              <div class="mt-4">
+                {{ if eq .Section "blog" }}
+                <a href="{{ "blog/" | relLangURL }}" class="theme-btn-2">Terug naar blog <i class="fa-solid fa-arrow-right-long"></i></a>
+                {{ else if eq .Section "products" }}
+                <a href="{{ "products/" | relLangURL }}" class="theme-btn-2">Terug naar aanbiedingen <i class="fa-solid fa-arrow-right-long"></i></a>
+                {{ else if eq .Section "page" }}
+                <a href="{{ "" | relLangURL }}" class="theme-btn-2">Naar homepage <i class="fa-solid fa-arrow-right-long"></i></a>
+                {{ end }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,17 @@
+<svg width="170" height="43" viewBox="0 0 170 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ferry ship icon -->
+  <g transform="translate(2 4)">
+    <!-- Hull -->
+    <path d="M0 28 L4 32 L32 32 L36 28 L36 24 L32 20 L4 20 L0 24 Z" fill="white"/>
+    <!-- Cabin / superstructure with transparent window cutout -->
+    <path fill-rule="evenodd" d="M8 20 L8 8 L28 8 L28 20 Z M10 12 L24 12 L24 16 L10 16 Z" fill="white"/>
+    <!-- Mast -->
+    <rect x="17" y="2" width="2" height="8" fill="white"/>
+    <!-- Flag / pennant -->
+    <path d="M19 2 L30 5 L19 8 Z" fill="white"/>
+    <!-- Bow wave accent -->
+    <path d="M2 26 L6 28 L2 30 Z" fill="white"/>
+  </g>
+  <!-- FerryDirect text -->
+  <text x="46" y="29" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="white" letter-spacing="0.5">FerryDirect</text>
+</svg>

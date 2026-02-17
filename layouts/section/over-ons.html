@@ -1,0 +1,65 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+{{ $page := . }}
+{{ $features := .Params.features | default slice }}
+{{ $description := .Params.description | default "" }}
+
+{{/* Hero: gradient, title, tagline (no breadcrumb image) */}}
+<section class="about-hero">
+  <div class="container">
+    <div class="about-hero__inner">
+      <h1 class="about-hero__title">{{ .Title }}</h1>
+      {{ with $description }}
+        <p class="about-hero__tagline">{{ . }}</p>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+{{/* Image strip – uses /img/about/ if images exist */}}
+<section class="about-visual">
+  <div class="container">
+    <div class="about-visual__grid">
+      <div class="about-visual__item about-visual__item--1" style="background-image: url('/img/about/01.jpg');"></div>
+      <div class="about-visual__item about-visual__item--2" style="background-image: url('/img/about/02.jpg');"></div>
+      <div class="about-visual__item about-visual__item--3" style="background-image: url('/img/about/03.png');"></div>
+    </div>
+  </div>
+</section>
+
+{{/* Value cards from front matter */}}
+{{ if $features }}
+<section class="about-values section-padding">
+  <div class="container">
+    <h2 class="about-values__heading">Waarom FerryDirect?</h2>
+    <div class="about-values__grid">
+      {{ range $features }}
+        <div class="about-value-card">
+          <div class="about-value-card__icon">
+            <i class="fa-solid {{ .icon | default "fa-star" }}"></i>
+          </div>
+          <h3 class="about-value-card__title">{{ .title }}</h3>
+          <p class="about-value-card__text">{{ .text }}</p>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{/* Main content */}}
+<section class="about-content section-padding">
+  <div class="container">
+    <div class="about-content__inner">
+      <div class="about-body markdown-body">
+        {{ .Content }}
+      </div>
+      <div class="about-cta">
+        <a href="{{ "contact/" | relLangURL }}" class="theme-btn">Neem contact op <i class="fa-solid fa-arrow-right-long"></i></a>
+        <a href="{{ "" | relLangURL }}" class="theme-btn-2 ms-3">Naar homepage <i class="fa-solid fa-arrow-right-long"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

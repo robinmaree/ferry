@@ -1,0 +1,12 @@
+{
+  "name": "ferrydirect",
+  "private": true,
+  "scripts": {
+    "build": "hugo --minify",
+    "dev": "hugo server"
+  },
+  "devDependencies": {
+    "bootstrap": "^5.3.3",
+    "sass": "^1.84.0"
+  }
+}

@@ -1,0 +1,36 @@
+baseURL = "https://ferrydirect.nl/"
+languageCode = "nl-nl"
+title = "FerryDirect.nl"
+
+[minify]
+  disableCSS = false
+  disableHTML = false
+  disableJS = false
+  disableJSON = false
+  disableSVG = false
+  disableXML = false
+  minifyOutput = true
+
+[params]
+  description = "De beste ferries op een plek!"
+
+[[menu.main]]
+  name = "Home"
+  url = "/"
+  weight = 10
+[[menu.main]]
+  name = "Blog"
+  url = "/blog/"
+  weight = 20
+[[menu.main]]
+  name = "Bestemmingen"
+  url = "/bestemmingen/"
+  weight = 30
+[[menu.main]]
+  name = "Over ons"
+  url = "/over-ons/"
+  weight = 40
+[[menu.main]]
+  name = "Contact"
+  url = "/contact/"
+  weight = 50

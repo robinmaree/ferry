@@ -1,0 +1,44 @@
+{{ define "title" }}{{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+<div class="hero-section">
+  <div class="container">
+    <div class="row align-items-center section-padding">
+      <div class="col-lg-8">
+        <h1 class="display-4 mb-4">Op reis met de Ferry, snel en eenvoudig!</h1>
+        <p class="lead mb-4">Reizen met de ferry is nu nog eenvoudiger dan ooit. Overzichtelijk en altijd actueel. Waar gaat jou reis naartoe?</p>
+        <a href="{{ "bestemmingen/" | relLangURL }}" class="theme-btn">
+          <span>Bekijk bestemmingen <i class="fa-solid fa-arrow-right-long"></i></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="section-padding fix">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-4 border rounded">
+          <h3>Blog</h3>
+          <p>Tips en de beste deals per maand.</p>
+          <a href="{{ "blog/" | relLangURL }}">Lees meer →</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4 border rounded">
+          <h3>Producten</h3>
+          <p>Alle acties en kortingen overzichtelijk.</p>
+          <a href="{{ "products/" | relLangURL }}">Bekijk aanbiedingen →</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4 border rounded">
+          <h3>Over ons</h3>
+          <p>Wie we zijn en waarom FerryDirect.</p>
+          <a href="{{ "over-ons/" | relLangURL }}">Meer info →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,13 @@
+{{ define "title" }}Pagina niet gevonden | {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+<section class="section-padding fix">
+  <div class="container">
+    <div class="text-center py-5">
+      <h1 class="mb-3">Pagina niet gevonden</h1>
+      <p class="mb-4">De pagina die je zoekt bestaat niet.</p>
+      <a href="{{ "" | relLangURL }}" class="theme-btn">Naar homepage</a>
+    </div>
+  </div>
+</section>
+{{ end }}
