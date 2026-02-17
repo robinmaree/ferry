@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 public/
+
+# Hugo
+.hugo_build.lock
