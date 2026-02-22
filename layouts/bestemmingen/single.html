@@ -2,193 +2,251 @@
 
 {{ define "main" }}
 
+{{/* Resolve hero image */}}
+{{ $heroImgSrc := "" }}
+{{ $res := resources.Get .Params.image }}
+{{ if $res }}
+  {{ $heroImgSrc = ($res.Process "webp q80").RelPermalink }}
+{{ end }}
+
 {{ $intro := .Params.intro | default .Params.description }}
-<div class="container bestemming-layout">
-  <div class="row g-5">
-    <div class="col-12 col-lg-8 bestemming-main">
-      <section class="bestemming-hero section-padding bestemming-hero--no-image">
-        <div class="row g-4 align-items-center">
-          <div class="col-12">
-            <nav class="bestemming-breadcrumb mb-3" aria-label="Breadcrumb">
-              <a href="{{ "bestemmingen/" | relLangURL }}">Bestemmingen</a>
-              <span class="bestemming-breadcrumb__sep" aria-hidden="true">/</span>
-              <span>{{ .Title }}</span>
-            </nav>
-            <h1 class="bestemming-title">{{ .Title }}</h1>
-            {{ if $intro }}
-            <p class="bestemming-intro__text mb-0">{{ $intro }}</p>
-            {{ end }}
-          </div>
-        </div>
-      </section>
+{{ $bookURL := .Params.book_url }}
+{{ $hasFacts := or .Params.departure_port .Params.arrival_port .Params.duration .Params.check_in .Params.departure_time }}
 
-      {{ $galleryImages := .Params.images | default (cond (isset .Params "image") (slice .Params.image) nil) }}
-      {{ if $galleryImages }}
-      <section class="bestemming-slideshow section-padding pt-0" aria-label="Foto's van deze overtocht">
-        <div class="bestemming-slideshow__wrap">
-          <div class="bestemming-slideshow__track">
-            {{ range $i, $e := $galleryImages }}
-            <div class="bestemming-slideshow__slide{{ if eq $i 0 }} is-active{{ end }}" data-slide>
-              <div class="bestemming-slideshow__img rounded-3">
-                {{- $res := resources.Get $e -}}
-                {{- $img := $res -}}
-                {{- $webp := $img.Process "webp q80" -}}
-                <img src="{{ $webp.RelPermalink }}"
-                     width="{{ $webp.Width }}"
-                     height="{{ $webp.Height }}"
-                     alt="{{ $.Title | htmlEscape }}"
-                     loading="lazy"
-                     decoding="async"
-                     class="bestemming-slideshow__img-el">
-              </div>
-            </div>
-            {{ end }}
-          </div>
-          {{ if gt (len $galleryImages) 1 }}
-          <button type="button" class="bestemming-slideshow__btn bestemming-slideshow__btn--prev" aria-label="Vorige foto"><i class="fa-solid fa-chevron-left"></i></button>
-          <button type="button" class="bestemming-slideshow__btn bestemming-slideshow__btn--next" aria-label="Volgende foto"><i class="fa-solid fa-chevron-right"></i></button>
-          <div class="bestemming-slideshow__dots" role="tablist" aria-label="Kies een foto">
-            {{ range $i, $e := $galleryImages }}
-            <button type="button" class="bestemming-slideshow__dot" role="tab" aria-selected="{{ if eq $i 0 }}true{{ else }}false{{ end }}" aria-label="Foto {{ add $i 1 }}" data-slide-index="{{ $i }}"></button>
-            {{ end }}
-          </div>
-          {{ end }}
-        </div>
-      </section>
+{{/* ── Banner / Hero ── */}}
+<div class="rd-banner{{ if not $heroImgSrc }} rd-banner--no-img{{ end }}">
+  {{ if $heroImgSrc }}
+  <img class="rd-banner__bg" src="{{ $heroImgSrc }}" alt="{{ .Title }}" loading="eager" decoding="async" />
+  {{ end }}
+  <div class="rd-banner__overlay"></div>
+  <div class="container rd-banner__content">
+    <nav class="rd-banner__breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ "bestemmingen/" | relLangURL }}">Bestemmingen</a>
+      <span aria-hidden="true">/</span>
+      <span>{{ .Title }}</span>
+    </nav>
+    <h1 class="rd-banner__title">{{ .Title }}</h1>
+    {{ if $intro }}
+    <p class="rd-banner__tagline">{{ $intro }}</p>
+    {{ end }}
+    {{ with .Params.price }}
+    <div class="rd-banner__price">
+      <span class="rd-banner__price-label">Vanaf</span>
+      <span class="rd-banner__price-value">€{{ . }}</span>
+      <span class="rd-banner__price-unit">p.p.</span>
+    </div>
+    {{ end }}
+    <div class="rd-banner__actions">
+      {{ with $bookURL }}
+      <a href="{{ . }}" class="rd-banner__btn rd-banner__btn--primary" target="_blank" rel="noopener sponsored">
+        Boek een overtocht <i class="fa-solid fa-arrow-right-long ms-2"></i>
+      </a>
       {{ end }}
+      {{ with .Params.operator_url }}
+      <a href="{{ . }}" class="rd-banner__btn rd-banner__btn--outline" target="_blank" rel="noopener">
+        Bezoek {{ $.Params.operator_name | default "rederij" }} <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size:.75em;"></i>
+      </a>
+      {{ end }}
+    </div>
+  </div>
+</div>
 
-      <section class="bestemming-content section-padding pt-0">
-        <div class="bestemming-body post-body markdown-body">
-          {{ .Content }}
-        </div>
-      </section>
+{{/* ── Main body: article + sidebar ── */}}
+<div class="container rd-page">
+  <div class="row g-5">
 
-      {{ $hasFacts := or .Params.departure_port .Params.arrival_port .Params.duration .Params.check_in .Params.departure_time }}
+    {{/* Article column */}}
+    <div class="col-12 col-lg-8">
+      <article class="rd-article">
+        {{ .Content }}
+      </article>
+
+      {{/* Facts strip */}}
       {{ if $hasFacts }}
-      <section class="bestemming-facts section-padding {{ if not $intro }}pt-0{{ end }}">
-        <div class="bestemming-facts__grid">
+      <section class="rd-article__section">
+        <h2 class="rd-section-title">Overtocht in het kort</h2>
+        <div class="bst-facts">
           {{ with .Params.departure_port }}
-          <div class="bestemming-facts__item">
-            <span class="bestemming-facts__icon"><i class="fa-solid fa-ship"></i></span>
-            <span class="bestemming-facts__label">Vertrek</span>
-            <span class="bestemming-facts__value">{{ . }}</span>
+          <div class="bst-facts__item">
+            <span class="bst-facts__icon"><i class="fa-solid fa-ship"></i></span>
+            <div>
+              <span class="bst-facts__label">Vertrek</span>
+              <span class="bst-facts__value">{{ . }}</span>
+            </div>
           </div>
           {{ end }}
           {{ with .Params.arrival_port }}
-          <div class="bestemming-facts__item">
-            <span class="bestemming-facts__icon"><i class="fa-solid fa-anchor"></i></span>
-            <span class="bestemming-facts__label">Aankomst</span>
-            <span class="bestemming-facts__value">{{ . }}</span>
+          <div class="bst-facts__item">
+            <span class="bst-facts__icon"><i class="fa-solid fa-anchor"></i></span>
+            <div>
+              <span class="bst-facts__label">Aankomst</span>
+              <span class="bst-facts__value">{{ . }}</span>
+            </div>
           </div>
           {{ end }}
           {{ with .Params.duration }}
-          <div class="bestemming-facts__item">
-            <span class="bestemming-facts__icon"><i class="fa-solid fa-clock"></i></span>
-            <span class="bestemming-facts__label">Vaartijd</span>
-            <span class="bestemming-facts__value">{{ . }}</span>
-          </div>
-          {{ end }}
-          {{ with .Params.check_in }}
-          <div class="bestemming-facts__item">
-            <span class="bestemming-facts__icon"><i class="fa-solid fa-ticket"></i></span>
-            <span class="bestemming-facts__label">Check-in</span>
-            <span class="bestemming-facts__value">{{ . }}</span>
+          <div class="bst-facts__item">
+            <span class="bst-facts__icon"><i class="fa-solid fa-clock"></i></span>
+            <div>
+              <span class="bst-facts__label">Vaartijd</span>
+              <span class="bst-facts__value">{{ . }}</span>
+            </div>
           </div>
           {{ end }}
           {{ with .Params.departure_time }}
-          <div class="bestemming-facts__item">
-            <span class="bestemming-facts__icon"><i class="fa-solid fa-calendar-check"></i></span>
-            <span class="bestemming-facts__label">Vertrektijd</span>
-            <span class="bestemming-facts__value">{{ . }}</span>
+          <div class="bst-facts__item">
+            <span class="bst-facts__icon"><i class="fa-solid fa-calendar-check"></i></span>
+            <div>
+              <span class="bst-facts__label">Afvaart</span>
+              <span class="bst-facts__value">{{ . }}</span>
+            </div>
+          </div>
+          {{ end }}
+          {{ with .Params.check_in }}
+          <div class="bst-facts__item">
+            <span class="bst-facts__icon"><i class="fa-solid fa-ticket"></i></span>
+            <div>
+              <span class="bst-facts__label">Check-in</span>
+              <span class="bst-facts__value">{{ . }}</span>
+            </div>
           </div>
           {{ end }}
         </div>
       </section>
       {{ end }}
 
-      <section class="bestemming-content section-padding pt-0">
-        {{ if or .Params.operator_name .Params.operator_logo }}
-        <div class="bestemming-operator mb-5">
-          <h2 class="bestemming-section-title">Rederij</h2>
-          <div class="bestemming-operator__card">
-            {{ with .Params.operator_logo }}
-            <div class="bestemming-operator__logo">
-              {{ $url := $.Params.operator_url }}
-              {{ if $url }}<a href="{{ $url }}" target="_blank" rel="noopener" class="bestemming-operator__logo-link">{{ end }}
-              <img src="{{ cond (hasPrefix . "http") . (. | relURL) }}" alt="{{ $.Params.operator_name | default "Rederij" }}" class="bestemming-operator__img" />
-              {{ if $url }}</a>{{ end }}
-            </div>
-            {{ end }}
-            <div class="bestemming-operator__body">
-              {{ with .Params.operator_name }}
-              <h3 class="bestemming-operator__name">
-                {{ $url := $.Params.operator_url }}
-                {{ if $url }}<a href="{{ $url }}" target="_blank" rel="noopener">{{ end }}{{ . }}{{ if $url }}</a>{{ end }}
-              </h3>
-              {{ end }}
-              {{ with .Params.operator_description }}
-              <p class="bestemming-operator__desc mb-0">{{ . }}</p>
-              {{ end }}
-            </div>
-          </div>
-        </div>
-        {{ end }}
+      {{/* Facilities */}}
+      {{ if .Params.facilities }}
+      <section class="rd-article__section">
+        <h2 class="rd-section-title">Faciliteiten aan boord</h2>
+        <ul class="rd-facilities">
+          {{ range .Params.facilities }}
+          <li class="rd-facilities__item"><i class="fa-solid fa-check"></i>{{ . }}</li>
+          {{ end }}
+        </ul>
+      </section>
+      {{ end }}
 
-        {{ if .Params.facilities }}
-        <div class="bestemming-facilities mb-5">
-          <h2 class="bestemming-section-title">Faciliteiten aan boord</h2>
-          <ul class="bestemming-facilities__list">
-            {{ range .Params.facilities }}
-            <li class="bestemming-facilities__item"><i class="fa-solid fa-check me-2"></i>{{ . }}</li>
-            {{ end }}
-          </ul>
-        </div>
-        {{ end }}
-
-        {{ if .Params.ships }}
-        <div class="bestemming-ships mb-5">
-          <h2 class="bestemming-section-title">Schepen op deze route</h2>
-          <div class="bestemming-ships__list">
-            {{ range .Params.ships }}
-            <div class="bestemming-ships__card">
-              <div class="bestemming-ships__icon"><i class="fa-solid fa-ship"></i></div>
-              <div class="bestemming-ships__body">
-                {{ if .name }}
-                  <h3 class="bestemming-ships__name">{{ .name }}</h3>
-                  {{ with .description }}<p class="bestemming-ships__desc mb-0">{{ . }}</p>{{ end }}
-                {{ else }}
-                  <h3 class="bestemming-ships__name">{{ . }}</h3>
-                {{ end }}
-              </div>
-            </div>
+      {{/* Ships */}}
+      {{ if .Params.ships }}
+      <section class="rd-article__section">
+        <h2 class="rd-section-title">Schepen op deze route</h2>
+        <div class="rd-ship-list">
+          {{ range .Params.ships }}
+          <div class="rd-ship-card">
+            {{ if .name }}
+            <p class="rd-ship-card__name">{{ .name }}</p>
+            {{ with .description }}<p class="rd-ship-card__desc">{{ . }}</p>{{ end }}
+            {{ else }}
+            <p class="rd-ship-card__name">{{ . }}</p>
             {{ end }}
           </div>
-        </div>
-        {{ end }}
-
-        <div class="mt-4 pt-3 border-top">
-          <a href="{{ "bestemmingen/" | relLangURL }}" class="theme-btn-2">Terug naar bestemmingen <i class="fa-solid fa-arrow-right-long"></i></a>
+          {{ end }}
         </div>
       </section>
+      {{ end }}
+
+      <div class="rd-article__back">
+        <a href="{{ "bestemmingen/" | relLangURL }}" class="theme-btn-2">
+          <i class="fa-solid fa-arrow-left me-2"></i>Alle bestemmingen
+        </a>
+      </div>
     </div>
 
-    <aside class="col-12 col-lg-4 bestemming-aside">
-      <div class="bestemming-sidebar">
-        {{ with .Params.price }}
-        <div class="bestemming-sidebar__price mb-4">
-          <span class="bestemming-sidebar__label">Vanaf</span>
-          <span class="bestemming-sidebar__value">€{{ . }} <small>p.p.</small></span>
+    {{/* Sidebar */}}
+    <aside class="col-12 col-lg-4">
+      <div class="rd-sidebar">
+
+        {{/* Book CTA card */}}
+        <div class="rd-sidebar__cta">
+          {{ with .Params.price }}
+          <div class="rd-sidebar__price">
+            <span class="rd-sidebar__price-label">Vanaf</span>
+            <span class="rd-sidebar__price-amount">€{{ . }}<small> p.p.</small></span>
+          </div>
+          {{ end }}
+          <p class="rd-sidebar__cta-label">Boek direct bij {{ .Params.operator_name | default "de rederij" }}</p>
+          {{ with $bookURL }}
+          <a href="{{ . }}" class="rd-sidebar__cta-btn" target="_blank" rel="noopener sponsored">
+            Bekijk prijzen &amp; beschikbaarheid <i class="fa-solid fa-arrow-right-long ms-2"></i>
+          </a>
+          {{ end }}
+          <p class="rd-sidebar__cta-note">Je gaat naar de website van {{ .Params.operator_name | default "de rederij" }}</p>
+        </div>
+
+        {{/* Route facts */}}
+        {{ if $hasFacts }}
+        <div class="rd-sidebar__section">
+          <h3 class="rd-sidebar__title">
+            <i class="fa-solid fa-route me-2"></i>Reisinfo
+          </h3>
+          <div class="bst-sidebar-facts">
+            {{ with .Params.departure_port }}
+            <div class="bst-sidebar-facts__row">
+              <span class="bst-sidebar-facts__label"><i class="fa-solid fa-ship"></i> Vertrek</span>
+              <span class="bst-sidebar-facts__value">{{ . }}</span>
+            </div>
+            {{ end }}
+            {{ with .Params.arrival_port }}
+            <div class="bst-sidebar-facts__row">
+              <span class="bst-sidebar-facts__label"><i class="fa-solid fa-anchor"></i> Aankomst</span>
+              <span class="bst-sidebar-facts__value">{{ . }}</span>
+            </div>
+            {{ end }}
+            {{ with .Params.duration }}
+            <div class="bst-sidebar-facts__row">
+              <span class="bst-sidebar-facts__label"><i class="fa-solid fa-clock"></i> Vaartijd</span>
+              <span class="bst-sidebar-facts__value">{{ . }}</span>
+            </div>
+            {{ end }}
+            {{ with .Params.departure_time }}
+            <div class="bst-sidebar-facts__row">
+              <span class="bst-sidebar-facts__label"><i class="fa-solid fa-calendar-check"></i> Afvaart</span>
+              <span class="bst-sidebar-facts__value">{{ . }}</span>
+            </div>
+            {{ end }}
+            {{ with .Params.check_in }}
+            <div class="bst-sidebar-facts__row">
+              <span class="bst-sidebar-facts__label"><i class="fa-solid fa-ticket"></i> Check-in</span>
+              <span class="bst-sidebar-facts__value">{{ . }}</span>
+            </div>
+            {{ end }}
+          </div>
         </div>
         {{ end }}
-        {{ with .Params.description }}
-        <p class="bestemming-sidebar__description mb-4">{{ . }}</p>
+
+        {{/* Rederij website */}}
+        {{ with .Params.operator_url }}
+        <div class="rd-sidebar__section rd-sidebar__section--slim">
+          <a href="{{ . }}" class="rd-sidebar__website-link" target="_blank" rel="noopener">
+            <i class="fa-solid fa-globe me-2"></i>Officiële website {{ $.Params.operator_name | default "rederij" }}
+            <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size:.75em;opacity:.7;"></i>
+          </a>
+        </div>
         {{ end }}
-        <a href="{{ default "https://www.dfds.com" .Params.book_url }}" class="theme-btn w-100 text-center" target="_blank" rel="noopener">Boek deze overtocht <i class="fa-solid fa-arrow-right-long ms-2"></i></a>
-        <p class="bestemming-sidebar__back mt-4 mb-0">
-          <a href="{{ "bestemmingen/" | relLangURL }}"><i class="fa-solid fa-arrow-left me-2"></i>Alle bestemmingen</a>
-        </p>
+
       </div>
     </aside>
+
   </div>
 </div>
+
+{{/* ── Mobile sticky booking bar ── */}}
+{{ if $bookURL }}
+<div class="rd-sticky-bar" aria-label="Boek direct">
+  <div class="rd-sticky-bar__inner">
+    {{ with .Params.price }}
+    <div class="rd-sticky-bar__price">
+      <span class="rd-sticky-bar__from">Vanaf</span>
+      <strong class="rd-sticky-bar__amount">€{{ . }}<small> p.p.</small></strong>
+    </div>
+    {{ end }}
+    <a href="{{ $bookURL }}" class="rd-sticky-bar__btn" target="_blank" rel="noopener sponsored">
+      <span class="rd-sticky-bar__btn-full">Boek bij {{ .Params.operator_name | default "rederij" }} <i class="fa-solid fa-arrow-right-long ms-1"></i></span>
+      <span class="rd-sticky-bar__btn-short">Boek nu <i class="fa-solid fa-arrow-right-long ms-1"></i></span>
+    </a>
+  </div>
+</div>
+{{ end }}
+
 {{ end }}
