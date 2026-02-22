@@ -2,38 +2,100 @@
 
 {{ define "main" }}
 {{ partial "page-title.html" . }}
-<section class="news-section-4 fix section-padding">
+
+<section class="lst-section">
   <div class="container">
-    <div class="row g-4">
-      {{ range .Pages }}
-      {{ $page := . }}
-      <div class="col-xl-4 col-lg-6 col-md-6 wow slideUp" data-delay=".3">
-        <div class="project-items style-2">
-          <div class="project-image">
-            <a href="{{ $page.Permalink }}">
-              {{ $imgPath := $page.Params.image }}
-              {{ with $imgPath }}
-                {{- $res := resources.Get $imgPath -}}
-                {{- if $res -}}
-                  {{- $q := $page.Params.q | default "80" -}}
-                  {{- $webp := $res.Process (printf "webp q%s" $q) -}}
-                  <img src="{{ $webp.RelPermalink }}" alt="{{ $page.Title }}" loading="lazy"
-                    decoding="async" width="{{ $webp.Width }}" height="{{ $webp.Height }}" />
-                {{- end -}}
-              {{ end }}
-            </a>
-            <div class="project-content">
-              {{ with $page.Params.category }}<p>{{ . }}</p>{{ end }}
-              <h4><a href="{{ $page.Permalink }}">{{ $page.Title }}</a></h4>
-            </div>
-          </div>
+
+    {{ if .Pages }}
+    {{ $pages := .Pages }}
+    {{ $first := index $pages 0 }}
+    {{ $rest := after 1 $pages }}
+
+    {{/* ── Featured first item ── */}}
+    {{ $fImgSrc := "" }}
+    {{ with $first.Params.image }}
+      {{- $res := resources.Get . -}}
+      {{- if $res -}}
+        {{- $q := $first.Params.q | default "80" -}}
+        {{- $webp := $res.Process (printf "webp q%s" $q) -}}
+        {{- $fImgSrc = $webp.RelPermalink -}}
+      {{- end -}}
+    {{ end }}
+
+    <a href="{{ $first.Permalink }}" class="lst-feature">
+      {{ if $fImgSrc }}
+      <img class="lst-feature__img" src="{{ $fImgSrc }}" alt="{{ $first.Title }}" loading="eager" decoding="async" />
+      {{ else }}
+      <div class="lst-feature__placeholder"><i class="fa-solid fa-ship"></i></div>
+      {{ end }}
+      <div class="lst-feature__overlay"></div>
+      <div class="lst-feature__body">
+        {{ with $first.Params.category }}
+        <span class="lst-feature__badge">{{ . }}</span>
+        {{ end }}
+        <h2 class="lst-feature__title">{{ $first.Title }}</h2>
+        {{ with $first.Params.description }}
+        <p class="lst-feature__desc">{{ . }}</p>
+        {{ end }}
+        <div class="lst-feature__footer">
+          {{ with $first.Params.price }}
+          <div class="lst-feature__price">Vanaf <strong>€{{ . }}</strong><span> p.p.</span></div>
+          {{ end }}
+          <span class="lst-feature__cta">Bekijk <i class="fa-solid fa-arrow-right-long"></i></span>
         </div>
       </div>
+    </a>
+
+    {{/* ── Remaining items in 2-column grid ── */}}
+    {{ if $rest }}
+    <div class="lst-grid">
+      {{ range $rest }}
+      {{ $p := . }}
+      {{ $imgSrc := "" }}
+      {{ with $p.Params.image }}
+        {{- $res := resources.Get . -}}
+        {{- if $res -}}
+          {{- $q := $p.Params.q | default "80" -}}
+          {{- $webp := $res.Process (printf "webp q%s" $q) -}}
+          {{- $imgSrc = $webp.RelPermalink -}}
+        {{- end -}}
+      {{ end }}
+      <a href="{{ .Permalink }}" class="lst-card">
+        <div class="lst-card__img-wrap">
+          {{ if $imgSrc }}
+          <img class="lst-card__img" src="{{ $imgSrc }}" alt="{{ .Title }}" loading="lazy" decoding="async" />
+          {{ else }}
+          <div class="lst-card__placeholder"><i class="fa-solid fa-ship"></i></div>
+          {{ end }}
+        </div>
+        <div class="lst-card__body">
+          {{ with .Params.category }}
+          <span class="lst-card__badge">{{ . }}</span>
+          {{ end }}
+          <h3 class="lst-card__title">{{ .Title }}</h3>
+          {{ with .Params.description }}
+          <p class="lst-card__desc">{{ . }}</p>
+          {{ end }}
+          <div class="lst-card__footer">
+            {{ with .Params.price }}
+            <div class="lst-card__price">Vanaf <strong>€{{ . }}</strong> p.p.</div>
+            {{ else }}
+            <div></div>
+            {{ end }}
+            <span class="lst-card__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </div>
+      </a>
       {{ end }}
     </div>
-    {{ if not .Pages }}
-    <p class="text-muted">{{ .Title }} – binnenkort meer inhoud.</p>
     {{ end }}
+
+    {{ else }}
+    <div class="lst-empty">
+      <p>{{ .Title }} – binnenkort meer inhoud.</p>
+    </div>
+    {{ end }}
+
   </div>
 </section>
 {{ end }}
