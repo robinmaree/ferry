@@ -1,9 +1,9 @@
-{{ define "title" }}{{ .Site.Title }}{{ end }}
+{{ define "title" }}Ferry vergelijken &amp; boeken | {{ .Site.Title }}{{ end }}
 
 {{ define "main" }}
 
 {{/* ── Hero ── */}}
-<div class="hp-hero">
+<div class="hp-hero" fetchpriority="high" loading="eager">
   <div class="hp-hero__overlay"></div>
   <div class="container hp-hero__content">
     <p class="hp-hero__eyebrow">Vergelijker voor veerdiensten</p>
@@ -193,4 +193,9 @@
 </section>
 {{ end }}
 
+{{ end }}
+
+{{ define "schema" }}
+{{- $schema := dict "@context" "https://schema.org" "@type" "WebSite" "name" .Site.Title "url" .Site.BaseURL "description" .Site.Params.description "publisher" (dict "@type" "Organization" "name" .Site.Title "url" .Site.BaseURL) -}}
+<script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
 {{ end }}

@@ -1,6 +1,7 @@
 baseURL = "https://ferrydirect.nl/"
 languageCode = "nl-nl"
 title = "FerryDirect.nl"
+disableKinds = ["taxonomy", "term"]
 
 [minify]
   disableCSS = false
