@@ -1,4 +1,8 @@
-<div class="breadcrumb-wrapper bg-cover" style="background-image: url('/img/breadcrumb.jpg')">
+{{ $res := resources.Get "/images/breadcrumb.png"}}
+{{- $img := $res -}}
+{{- $webp := $img.Process "webp q80" -}}
+
+<div class="breadcrumb-wrapper bg-cover" style="background-image: url('{{ $webp.RelPermalink }}')">
   <div class="container">
     <div class="page-heading">
       <h1 class="wow slideUp" data-delay=".3">{{ .Title }}</h1>
