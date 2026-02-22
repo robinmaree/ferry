@@ -4,16 +4,17 @@
     }
 }
 
+# 301 redirect www to non-www (canonical domain)
+www.ferrydirect.nl {
+    redir * https://ferrydirect.nl{uri} permanent
+}
+
 ferrydirect.nl {
     root * /srv
 
     import common
 
-    basic_auth {
-		# Username "Bob", password "hiccup"
-		robin $2a$14$Zkx19XLiW6VYouLHR5NmfOFU0z2GTNmpkT/5qqR7hx4IjWJPDhjvG
-	}
-
+    encode gzip zstd
     file_server
     try_files {path} {path}/ /404.html
 }

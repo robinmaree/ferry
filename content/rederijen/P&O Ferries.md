@@ -2,11 +2,8 @@
 title: "P&O Ferries"
 slug: po
 category: Verenigd Koninkrij
-image: "/img/rederij-po.png"
-images:
-  - /img/bestemmingen/newcastle.jpg
-  - /img/bestemmingen/amsterdam-newcastle-ship.jpg
-  - /img/bestemmingen/amsterdam-newcastle-cabin.jpg
+image: "images/rederij-po.png"
+image_hero: "images/rederij-po.png"
 price: "69"
 description: "Veerboot van IJmuiden naar Newcastle met DFDS. Vanaf €69 p.p. (4 personen, binnenhut, auto). Ongeveer 17 uur varen, geen bagagebeperking."
 book_url: "https://www.dfds.com/en/passenger-ferries/ferry-crossings/ferries-to-uk/amsterdam-newcastle"

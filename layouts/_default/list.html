@@ -2,7 +2,6 @@
 
 {{ define "main" }}
 {{ partial "page-title.html" . }}
-{{ if eq .Section "blog" }}
 <section class="news-section-4 fix section-padding">
   <div class="container">
     <div class="row g-4">
@@ -11,56 +10,21 @@
       <div class="col-xl-4 col-lg-6 col-md-6 wow slideUp" data-delay=".3">
         <div class="project-items style-2">
           <div class="project-image">
-            <a href="{{ .Permalink }}">
-              {{ with .Params.image }}<img src="{{ . }}" alt="{{ $page.Title }}" />{{ else }}<img src="/img/news/01.jpg" alt="{{ $page.Title }}" />{{ end }}
+            <a href="{{ $page.Permalink }}">
+              {{ $imgPath := $page.Params.image }}
+              {{ with $imgPath }}
+                {{- $res := resources.Get $imgPath -}}
+                {{- if $res -}}
+                  {{- $q := $page.Params.q | default "80" -}}
+                  {{- $webp := $res.Process (printf "webp q%s" $q) -}}
+                  <img src="{{ $webp.RelPermalink }}" alt="{{ $page.Title }}" loading="lazy"
+                    decoding="async" width="{{ $webp.Width }}" height="{{ $webp.Height }}" />
+                {{- end -}}
+              {{ end }}
             </a>
             <div class="project-content">
-              {{ with .Params.category }}<p>{{ . }}</p>{{ end }}
-              <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
-            </div>
-          </div>
-        </div>
-      </div>
-      {{ end }}
-    </div>
-  </div>
-</section>
-{{ else if eq .Section "products" }}
-<section class="project-section section-padding fix">
-  <div class="container">
-    <div class="row g-4">
-      {{ range .Pages }}
-      <div class="col-xl-4 col-lg-6 col-md-6 wow slideUp" data-delay=".3">
-        <div class="project-items style-2">
-          <div class="project-image">
-            <img src="{{ .Params.image | default "/img/project/01.jpg" }}" alt="{{ .Title }}" />
-            <div class="project-content">
-              {{ with .Params.category }}<p>{{ . }}</p>{{ end }}
-              <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
-              {{ with .Params.price }}<span class="text-white fw-bold">{{ . }}</span>{{ end }}
-            </div>
-          </div>
-        </div>
-      </div>
-      {{ end }}
-    </div>
-  </div>
-</section>
-{{ else }}
-<section class="news-section-4 fix section-padding">
-  <div class="container">
-    <div class="row g-4">
-      {{ range .Pages }}
-      {{ $page := . }}
-      <div class="col-xl-4 col-lg-6 col-md-6 wow slideUp" data-delay=".3">
-        <div class="project-items style-2">
-          <div class="project-image">
-            <a href="{{ .Permalink }}">
-              {{ with .Params.image }}<img src="{{ . }}" alt="{{ $page.Title }}" />{{ else }}<img src="/img/news/01.jpg" alt="{{ $page.Title }}" />{{ end }}
-            </a>
-            <div class="project-content">
-              {{ with .Params.category }}<p>{{ . }}</p>{{ end }}
-              <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+              {{ with $page.Params.category }}<p>{{ . }}</p>{{ end }}
+              <h4><a href="{{ $page.Permalink }}">{{ $page.Title }}</a></h4>
             </div>
           </div>
         </div>
@@ -72,5 +36,4 @@
     {{ end }}
   </div>
 </section>
-{{ end }}
 {{ end }}

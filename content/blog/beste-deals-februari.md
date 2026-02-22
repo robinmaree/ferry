@@ -4,7 +4,7 @@ slug: ontspannen-met-de-ferry-naar-het-verenigd-koninkrijk
 date: 2025-02-10
 author: FerryDirect
 category: Verenigd Koninkrijk
-image: "/img/met-de-boot.png"
+image: "/images/met-de-boot.png"
 intro: "Reizen met de ferry van Nederland naar het Verenigd Koninkrijk is meer dan alleen vervoer – het is een ervaring op zich. Terwijl je langzaam de haven verlaat en de zee zich voor je uitstrekt, begint je vakantie al aan boord. Comfort, vrijheid en uitzicht maken de overtocht uniek."
 ---
 

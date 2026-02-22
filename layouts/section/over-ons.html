@@ -21,9 +21,22 @@
 <section class="about-visual">
   <div class="container">
     <div class="about-visual__grid">
-      <div class="about-visual__item about-visual__item--1" style="background-image: url('/img/about/01.jpg');"></div>
-      <div class="about-visual__item about-visual__item--2" style="background-image: url('/img/about/02.jpg');"></div>
-      <div class="about-visual__item about-visual__item--3" style="background-image: url('/img/about/03.png');"></div>
+
+      {{- $res1 := resources.Get (index $page.Params.images 0) -}}
+      {{- $img1 := $res1 -}}
+      {{- $webp1 := $img1.Process "webp q80" -}}
+
+      {{- $res2 := resources.Get (index $page.Params.images 1) -}}
+      {{- $img2 := $res2 -}}
+      {{- $webp2 := $img2.Process "webp q80" -}}
+
+      {{- $res3 := resources.Get (index $page.Params.images 2) -}}
+      {{- $img3 := $res3 -}}
+      {{- $webp3 := $img3.Process "webp q80" -}}
+
+      <div class="about-visual__item about-visual__item--1" style="background-image: url('{{ $webp1.RelPermalink }}');"></div>
+      <div class="about-visual__item about-visual__item--2" style="background-image: url('{{ $webp2.RelPermalink }}');"></div>
+      <div class="about-visual__item about-visual__item--3" style="background-image: url('{{ $webp3.RelPermalink }}');"></div>
     </div>
   </div>
 </section>
@@ -54,10 +67,6 @@
     <div class="about-content__inner">
       <div class="about-body markdown-body">
         {{ .Content }}
-      </div>
-      <div class="about-cta">
-        <a href="{{ "contact/" | relLangURL }}" class="theme-btn">Neem contact op <i class="fa-solid fa-arrow-right-long"></i></a>
-        <a href="{{ "" | relLangURL }}" class="theme-btn-2 ms-3">Naar homepage <i class="fa-solid fa-arrow-right-long"></i></a>
       </div>
     </div>
   </div>

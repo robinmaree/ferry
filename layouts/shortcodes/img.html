@@ -1,0 +1,25 @@
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- $size := .Get "size" | default "" -}}
+{{- $q := .Get "q" | default "80" -}}
+
+{{- $res := resources.Get $src -}}
+
+{{- $img := $res -}}
+{{- if $size -}}
+  {{- $img = $img.Resize $size -}}
+{{- end -}}
+
+{{- $webp := $img.Process (printf "webp q%s" $q) -}}
+
+<div class="content-img">
+  <div class="content-img__frame">
+    <img src="{{ $webp.RelPermalink }}"
+         width="{{ $webp.Width }}"
+         height="{{ $webp.Height }}"
+         alt="{{ $alt | htmlEscape }}"
+         loading="lazy"
+         decoding="async"
+         class="content-img__img">
+  </div>
+</div>

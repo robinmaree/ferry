@@ -1,0 +1,175 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+
+{{/* Resolve hero image */}}
+{{ $heroImgSrc := "" }}
+{{ $res := resources.Get .Params.image_hero }}
+{{ if $res }}
+  {{ $heroImgSrc = ($res.Process "webp q80").RelPermalink }}
+{{ end }}
+
+{{ $intro := .Params.intro | default .Params.description }}
+{{ $operatorName := .Params.operator_name | default .Title }}
+{{ $routes := where (where .Site.RegularPages "Section" "bestemmingen") "Params.operator_name" $operatorName }}
+{{ $bookURL := .Params.book_url | default .Params.operator_url | default .Params.website }}
+
+{{/* ── Banner / Hero ── */}}
+<div class="rd-banner{{ if not $heroImgSrc }} rd-banner--no-img{{ end }}">
+  {{ if $heroImgSrc }}
+  <img class="rd-banner__bg" src="{{ $heroImgSrc }}" alt="{{ .Title }}" loading="eager" decoding="async" />
+  {{ end }}
+  <div class="rd-banner__overlay"></div>
+  <div class="container rd-banner__content">
+    <nav class="rd-banner__breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ "rederijen/" | relLangURL }}">Rederijen</a>
+      <span aria-hidden="true">/</span>
+      <span>{{ .Title }}</span>
+    </nav>
+    <h1 class="rd-banner__title">{{ .Title }}</h1>
+    {{ if $intro }}
+    <p class="rd-banner__tagline">{{ $intro }}</p>
+    {{ end }}
+    {{ with .Params.price }}
+    <div class="rd-banner__price">
+      <span class="rd-banner__price-label">Vanaf</span>
+      <span class="rd-banner__price-value">€{{ . }}</span>
+      <span class="rd-banner__price-unit">p.p.</span>
+    </div>
+    {{ end }}
+    <div class="rd-banner__actions">
+      {{ with $bookURL }}
+      <a href="{{ . }}" class="rd-banner__btn rd-banner__btn--primary" target="_blank" rel="noopener sponsored">
+        Boek een overtocht <i class="fa-solid fa-arrow-right-long ms-2"></i>
+      </a>
+      {{ end }}
+      {{ with or .Params.website .Params.operator_url }}
+      <a href="{{ . }}" class="rd-banner__btn rd-banner__btn--outline" target="_blank" rel="noopener">
+        Bezoek website <i class="fa-solid fa-arrow-up-right-from-square ms-2"></i>
+      </a>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+{{/* ── Main body: article + sidebar ── */}}
+<div class="container rd-page">
+  <div class="row g-5">
+
+    {{/* Article column */}}
+    <div class="col-12 col-lg-8">
+      <article class="rd-article">
+        {{ .Content }}
+      </article>
+
+      {{ if .Params.facilities }}
+      <section class="rd-article__section">
+        <h2 class="rd-section-title">Faciliteiten aan boord</h2>
+        <ul class="rd-facilities">
+          {{ range .Params.facilities }}
+          <li class="rd-facilities__item"><i class="fa-solid fa-check"></i>{{ . }}</li>
+          {{ end }}
+        </ul>
+      </section>
+      {{ end }}
+
+      <div class="rd-article__back">
+        <a href="{{ "rederijen/" | relLangURL }}" class="theme-btn-2">
+          <i class="fa-solid fa-arrow-left me-2"></i>Alle rederijen
+        </a>
+      </div>
+    </div>
+
+    {{/* Sidebar */}}
+    <aside class="col-12 col-lg-4">
+      <div class="rd-sidebar">
+
+        {{/* Book CTA card */}}
+        <div class="rd-sidebar__cta">
+          {{ with .Params.price }}
+          <div class="rd-sidebar__price">
+            <span class="rd-sidebar__price-label">Vanaf</span>
+            <span class="rd-sidebar__price-amount">€{{ . }}<small> p.p.</small></span>
+          </div>
+          {{ end }}
+          <p class="rd-sidebar__cta-label">Boek direct via {{ $operatorName }}</p>
+          {{ with $bookURL }}
+          <a href="{{ . }}" class="rd-sidebar__cta-btn" target="_blank" rel="noopener sponsored">
+            Bekijk prijzen &amp; beschikbaarheid <i class="fa-solid fa-arrow-right-long ms-2"></i>
+          </a>
+          {{ end }}
+          <p class="rd-sidebar__cta-note">Je gaat naar de website van {{ $operatorName }}</p>
+        </div>
+
+        {{/* Routes */}}
+        {{ if $routes }}
+        <div class="rd-sidebar__section">
+          <h3 class="rd-sidebar__title">
+            <i class="fa-solid fa-route me-2"></i>Overtochten
+          </h3>
+          <div class="rd-route-list">
+            {{ range $routes }}
+            <a href="{{ .RelPermalink }}" class="rd-route-card">
+              <span class="rd-route-card__icon"><i class="fa-solid fa-ship"></i></span>
+              <span class="rd-route-card__name">{{ .Title }}</span>
+              <i class="fa-solid fa-chevron-right rd-route-card__arrow"></i>
+            </a>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+
+        {{/* Ships */}}
+        {{ if .Params.ships }}
+        <div class="rd-sidebar__section">
+          <h3 class="rd-sidebar__title">
+            <i class="fa-solid fa-ship me-2"></i>Schepen
+          </h3>
+          <div class="rd-ship-list">
+            {{ range .Params.ships }}
+            <div class="rd-ship-card">
+              {{ if .name }}
+              <p class="rd-ship-card__name">{{ .name }}</p>
+              {{ with .description }}<p class="rd-ship-card__desc">{{ . }}</p>{{ end }}
+              {{ else }}
+              <p class="rd-ship-card__name">{{ . }}</p>
+              {{ end }}
+            </div>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+
+        {{/* Website link */}}
+        {{ with or .Params.website .Params.operator_url }}
+        <div class="rd-sidebar__section rd-sidebar__section--slim">
+          <a href="{{ . }}" class="rd-sidebar__website-link" target="_blank" rel="noopener">
+            <i class="fa-solid fa-globe me-2"></i>Officiële website {{ $operatorName }}
+            <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size:.75em;opacity:.7;"></i>
+          </a>
+        </div>
+        {{ end }}
+
+      </div>
+    </aside>
+  </div>
+</div>
+
+{{/* ── Mobile / tablet sticky booking bar ── */}}
+{{ if $bookURL }}
+<div class="rd-sticky-bar" aria-label="Boek direct">
+  <div class="rd-sticky-bar__inner">
+    {{ with .Params.price }}
+    <div class="rd-sticky-bar__price">
+      <span class="rd-sticky-bar__from">Vanaf</span>
+      <strong class="rd-sticky-bar__amount">€{{ . }}<small> p.p.</small></strong>
+    </div>
+    {{ end }}
+    <a href="{{ $bookURL }}" class="rd-sticky-bar__btn" target="_blank" rel="noopener sponsored">
+      Boek direct via {{ $operatorName }} <i class="fa-solid fa-arrow-right-long ms-2"></i>
+    </a>
+  </div>
+</div>
+{{ end }}
+
+{{ end }}

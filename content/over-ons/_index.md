@@ -1,6 +1,6 @@
 ---
 title: "Over ons"
-description: "FerryDirect.nl helpt je om dagelijks te besparen op je vaste lasten, boodschappen en meer."
+description: "FerryDirect.nl geeft je een overzicht van verschillende ferries."
 features:
   - title: Betrouwbaar
     text: We checken alle aanbiedingen op geldigheid
@@ -8,21 +8,20 @@ features:
   - title: Overzichtelijk
     text: Duidelijke categorieën en filters
     icon: fa-list-ul
-  - title: Gratis
-    text: Geen abonnement, gewoon besparen
+  - title: Informatie
+    text: Alle details en fotos op een plek 
     icon: fa-gift
+images:
+  - images/about/01.png
+  - images/about/02.png
+  - images/about/03.png
 ---
 
 # Over FerryDirect.nl
 
-FerryDirect.nl helpt je om dagelijks te besparen op je vaste lasten, boodschappen en meer.
+FerryDirect.nl biedt een overzicht van verschillende cruises.
 
-## Wat we doen
+Heb je een vraag of tip? Neem contact met ons op!
 
-We verzamelen de beste kortingen, aanbiedingen en cashback-acties op één plek. Zo hoef jij niet meer zelf te zoeken en mis je geen deal.
-
-## Waarom FerryDirect?
-
-Onze drie pijlers staan hierboven: **betrouwbaar**, **overzichtelijk** en **gratis**.
-
-Heb je een vraag of tip? [Neem contact met ons op](/contact/).
+## Contact Gegevens
+E-mail: info@ferrydirect.nl

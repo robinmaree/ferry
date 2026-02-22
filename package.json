@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "hugo --minify",
-    "dev": "hugo server"
+    "dev": "hugo server --bind 0.0.0.0"
   },
   "devDependencies": {
     "bootstrap": "^5.3.3",

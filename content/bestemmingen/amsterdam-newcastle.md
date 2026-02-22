@@ -2,11 +2,11 @@
 title: "Amsterdam – Newcastle"
 slug: amsterdam-newcastle
 category: Verenigd Koninkrijk
-image: /img/bestemmingen/newcastle.jpg
+image: "images/bestemmingen/newcastle.jpg"
 images:
-  - /img/bestemmingen/newcastle.jpg
-  - /img/bestemmingen/amsterdam-newcastle-ship.jpg
-  - /img/bestemmingen/amsterdam-newcastle-cabin.jpg
+  - "images/bestemmingen/newcastle.jpg"
+  - "images/bestemmingen/newcastle.jpg"
+
 price: "69"
 description: "Veerboot van IJmuiden naar Newcastle met DFDS. Vanaf €69 p.p. (4 personen, binnenhut, auto). Ongeveer 17 uur varen, geen bagagebeperking."
 book_url: "https://www.dfds.com/en/passenger-ferries/ferry-crossings/ferries-to-uk/amsterdam-newcastle"

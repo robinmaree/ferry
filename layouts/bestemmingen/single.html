@@ -29,7 +29,18 @@
           <div class="bestemming-slideshow__track">
             {{ range $i, $e := $galleryImages }}
             <div class="bestemming-slideshow__slide{{ if eq $i 0 }} is-active{{ end }}" data-slide>
-              <div class="bestemming-slideshow__img bg-cover rounded-3" style="background-image: url('{{ cond (hasPrefix $e "http") $e ($e | relURL) }}')" role="img" aria-label="{{ $.Title }}"></div>
+              <div class="bestemming-slideshow__img rounded-3">
+                {{- $res := resources.Get $e -}}
+                {{- $img := $res -}}
+                {{- $webp := $img.Process "webp q80" -}}
+                <img src="{{ $webp.RelPermalink }}"
+                     width="{{ $webp.Width }}"
+                     height="{{ $webp.Height }}"
+                     alt="{{ $.Title | htmlEscape }}"
+                     loading="lazy"
+                     decoding="async"
+                     class="bestemming-slideshow__img-el">
+              </div>
             </div>
             {{ end }}
           </div>

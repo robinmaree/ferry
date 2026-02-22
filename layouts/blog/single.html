@@ -32,7 +32,10 @@
             <div class="single-blog-post">
               {{ with .Params.image }}
               <div class="post-featured-image mb-4 w-100">
-                <img src="{{ cond (hasPrefix . "http") . (. | relURL) }}" alt="{{ $.Title }}" class="img-fluid w-100 rounded-4" fetchpriority="high" loading="eager">
+                {{- $res := resources.Get $.Params.image -}}
+                {{- $img := $res -}}
+                {{- $webp := $img.Process "webp q80" -}}
+                <img src="{{ $webp.RelPermalink }}" alt="{{ $.Title }}" class="img-fluid w-100 rounded-4" fetchpriority="high" loading="eager" width="{{ $webp.Width }}" height="{{ $webp.Height }}">
               </div>
               {{ end }}
               <div class="post-content">

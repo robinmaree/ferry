@@ -1,20 +1,6 @@
 (function () {
   'use strict';
 
-  // Scroll-to-top button (#scrollUp)
-  var scrollUp = document.getElementById('scrollUp');
-  if (scrollUp) {
-    function toggleScrollUp() {
-      scrollUp.style.display = window.scrollY > 300 ? 'block' : 'none';
-    }
-    scrollUp.addEventListener('click', function (e) {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    window.addEventListener('scroll', toggleScrollUp, { passive: true });
-    toggleScrollUp();
-  }
-
   // Mobile menu toggle
   var menuToggle = document.getElementById('menu-toggle');
   var navWrapper = document.getElementById('main-nav-wrapper');
