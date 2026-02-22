@@ -1,44 +1,196 @@
 {{ define "title" }}{{ .Site.Title }}{{ end }}
 
 {{ define "main" }}
-<div class="hero-section">
+
+{{/* ── Hero ── */}}
+<div class="hp-hero">
+  <div class="hp-hero__overlay"></div>
+  <div class="container hp-hero__content">
+    <p class="hp-hero__eyebrow">Vergelijker voor veerdiensten</p>
+    <h1 class="hp-hero__title">Op reis met de ferry,<br>snel en eenvoudig</h1>
+    <p class="hp-hero__lead">Vergelijk ferryroutes en boek direct bij de rederij. Geen bijkomende kosten, altijd actuele prijzen.</p>
+    <div class="hp-hero__actions">
+      <a href="{{ "bestemmingen/" | relLangURL }}" class="hp-hero__btn hp-hero__btn--primary">
+        Bekijk routes <i class="fa-solid fa-arrow-right-long"></i>
+      </a>
+      <a href="{{ "rederijen/" | relLangURL }}" class="hp-hero__btn hp-hero__btn--outline">
+        Rederijen
+      </a>
+    </div>
+  </div>
+</div>
+
+{{/* ── USP strip ── */}}
+<div class="hp-usp">
   <div class="container">
-    <div class="row align-items-center section-padding">
-      <div class="col-lg-8">
-        <h1 class="display-4 mb-4">Op reis met de Ferry, snel en eenvoudig!</h1>
-        <p class="lead mb-4">Reizen met de ferry is nu nog eenvoudiger dan ooit. Overzichtelijk en altijd actueel. Waar gaat jou reis naartoe?</p>
-        <a href="{{ "bestemmingen/" | relLangURL }}" class="theme-btn">
-          <span>Bekijk bestemmingen <i class="fa-solid fa-arrow-right-long"></i></span>
-        </a>
+    <div class="hp-usp__grid">
+      <div class="hp-usp__item">
+        <i class="fa-solid fa-magnifying-glass hp-usp__icon"></i>
+        <div>
+          <strong>Overzichtelijk vergelijken</strong>
+          <span>Alle routes &amp; rederijen op één plek</span>
+        </div>
+      </div>
+      <div class="hp-usp__divider"></div>
+      <div class="hp-usp__item">
+        <i class="fa-solid fa-tag hp-usp__icon"></i>
+        <div>
+          <strong>Direct bij de rederij</strong>
+          <span>Geen tussenpersoon, geen meerkosten</span>
+        </div>
+      </div>
+      <div class="hp-usp__divider"></div>
+      <div class="hp-usp__item">
+        <i class="fa-solid fa-ship hp-usp__icon"></i>
+        <div>
+          <strong>Altijd actueel</strong>
+          <span>Beschikbaarheid &amp; prijzen up-to-date</span>
+        </div>
       </div>
     </div>
   </div>
 </div>
-<section class="section-padding fix">
+
+{{/* ── Bestemmingen ── */}}
+{{ $bestemmingen := where .Site.RegularPages "Section" "bestemmingen" }}
+{{ if $bestemmingen }}
+<section class="hp-section hp-section--light">
   <div class="container">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="p-4 border rounded">
-          <h3>Blog</h3>
-          <p>Tips, reisverhalen en de beste deals per maand.</p>
-          <a href="{{ "blog/" | relLangURL }}">Lees meer →</a>
+    <div class="hp-section__header">
+      <div>
+        <p class="hp-section__eyebrow">Ferry routes</p>
+        <h2 class="hp-section__title">Populaire overtochten</h2>
+      </div>
+      <a href="{{ "bestemmingen/" | relLangURL }}" class="hp-section__more">
+        Alle routes <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+    {{ range $bestemmingen }}
+    {{ $imgSrc := .Params.image | default "" }}
+    {{ with .Params.image }}
+      {{- $clean := strings.TrimPrefix "/" . -}}
+      {{- $res := resources.Get $clean -}}
+      {{- if $res -}}
+        {{- $webp := $res.Process "webp q80" -}}
+        {{- $imgSrc = $webp.RelPermalink -}}
+      {{- end -}}
+    {{ end }}
+    <a href="{{ .Permalink }}" class="hp-route-card">
+      <div class="hp-route-card__img-wrap">
+        {{ if $imgSrc }}
+        <img src="{{ $imgSrc }}" alt="{{ .Title }}" loading="eager" decoding="async" />
+        {{ else }}
+        <div class="hp-route-card__placeholder"><i class="fa-solid fa-anchor"></i></div>
+        {{ end }}
+      </div>
+      <div class="hp-route-card__overlay"></div>
+      <div class="hp-route-card__body">
+        {{ with .Params.category }}<span class="hp-route-card__cat">{{ . }}</span>{{ end }}
+        <h3 class="hp-route-card__title">{{ .Title }}</h3>
+        {{ with .Params.description }}<p class="hp-route-card__desc">{{ . }}</p>{{ end }}
+        <div class="hp-route-card__footer">
+          {{ with .Params.price }}
+          <span class="hp-route-card__price">Vanaf <strong>€{{ . }}</strong><span> p.p.</span></span>
+          {{ end }}
+          <span class="hp-route-card__cta">Boek nu <i class="fa-solid fa-arrow-right-long"></i></span>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="p-4 border rounded">
-          <h3>Producten</h3>
-          <p>Waar gaat uw volgende reis naar toe?</p>
-          <a href="{{ "bestemmingen/" | relLangURL }}">Bekijk aanbiedingen →</a>
-        </div>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+{{/* ── Rederijen ── */}}
+{{ $rederijen := where .Site.RegularPages "Section" "rederijen" }}
+{{ if $rederijen }}
+<section class="hp-section hp-section--white">
+  <div class="container">
+    <div class="hp-section__header">
+      <div>
+        <p class="hp-section__eyebrow">Vaar met de beste</p>
+        <h2 class="hp-section__title">Rederijen</h2>
       </div>
-      <div class="col-md-4">
-        <div class="p-4 border rounded">
-          <h3>Rederijen</h3>
-          <p>Welke bedrijven bieden deze diensten aan?</p>
-          <a href="{{ "rederijen/" | relLangURL }}">Rederijen →</a>
+      <a href="{{ "rederijen/" | relLangURL }}" class="hp-section__more">
+        Alle rederijen <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+    <div class="hp-operators">
+      {{ range $rederijen }}
+      {{ $p := . }}
+      {{ $imgSrc := "" }}
+      {{ with $p.Params.image }}
+        {{- $clean := strings.TrimPrefix "/" . -}}
+        {{- $res := resources.Get $clean -}}
+        {{- if $res -}}
+          {{- $webp := $res.Process "webp q80" -}}
+          {{- $imgSrc = $webp.RelPermalink -}}
+        {{- end -}}
+      {{ end }}
+      <a href="{{ $p.Permalink }}" class="hp-operator-card">
+        <div class="hp-operator-card__img-wrap">
+          {{ if $imgSrc }}
+          <img src="{{ $imgSrc }}" alt="{{ $p.Title }}" loading="lazy" decoding="async" />
+          {{ else }}
+          <div class="hp-operator-card__placeholder"><i class="fa-solid fa-ship"></i></div>
+          {{ end }}
         </div>
-      </div>
+        <div class="hp-operator-card__body">
+          <h3 class="hp-operator-card__name">{{ $p.Title }}</h3>
+          {{ with $p.Params.description }}<p class="hp-operator-card__desc">{{ . }}</p>{{ end }}
+          {{ with $p.Params.price }}
+          <p class="hp-operator-card__price">Vanaf <strong>€{{ . }}</strong> p.p.</p>
+          {{ end }}
+          <span class="hp-operator-card__link">Bekijk rederij <i class="fa-solid fa-chevron-right"></i></span>
+        </div>
+      </a>
+      {{ end }}
     </div>
   </div>
 </section>
+{{ end }}
+
+{{/* ── Blog ── */}}
+{{ $posts := where .Site.RegularPages "Section" "blog" }}
+{{ if $posts }}
+<section class="hp-section hp-section--light">
+  <div class="container">
+    <div class="hp-section__header">
+      <div>
+        <p class="hp-section__eyebrow">Inspiratie &amp; tips</p>
+        <h2 class="hp-section__title">Reisverhalen</h2>
+      </div>
+      <a href="{{ "blog/" | relLangURL }}" class="hp-section__more">
+        Alle artikelen <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+    {{ range first 1 $posts }}
+    {{ $imgSrc := .Params.image | default "" }}
+    {{ with .Params.image }}
+      {{- $clean := strings.TrimPrefix "/" . -}}
+      {{- $res := resources.Get $clean -}}
+      {{- if $res -}}
+        {{- $webp := $res.Process "webp q80" -}}
+        {{- $imgSrc = $webp.RelPermalink -}}
+      {{- end -}}
+    {{ end }}
+    <a href="{{ .Permalink }}" class="hp-blog-feature">
+      {{ if $imgSrc }}
+      <img class="hp-blog-feature__img" src="{{ $imgSrc }}" alt="{{ .Title }}" loading="lazy" decoding="async" />
+      {{ else }}
+      <div class="hp-blog-feature__placeholder"></div>
+      {{ end }}
+      <div class="hp-blog-feature__overlay"></div>
+      <div class="hp-blog-feature__body">
+        {{ with .Params.category }}<span class="hp-blog-feature__cat">{{ . }}</span>{{ end }}
+        <h3 class="hp-blog-feature__title">{{ .Title }}</h3>
+        {{ with .Params.intro }}<p class="hp-blog-feature__intro">{{ . }}</p>{{ end }}
+        <span class="hp-blog-feature__cta">Lees artikel <i class="fa-solid fa-arrow-right-long"></i></span>
+      </div>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
 {{ end }}
