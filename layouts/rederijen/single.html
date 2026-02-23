@@ -17,7 +17,7 @@
 {{/* ── Banner / Hero ── */}}
 <div class="rd-banner{{ if not $heroImgSrc }} rd-banner--no-img{{ end }}">
   {{ if $heroImgSrc }}
-  <img class="rd-banner__bg" src="{{ $heroImgSrc }}" alt="{{ .Title }}" loading="eager" decoding="async" />
+  <img class="rd-banner__bg" src="{{ $heroImgSrc }}" alt="{{ .Title }}" loading="eager" decoding="async" fetchpriority="high" />
   {{ end }}
   <div class="rd-banner__overlay"></div>
   <div class="container rd-banner__content">
