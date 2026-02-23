@@ -1,0 +1,41 @@
+{{- $images := slice -}}
+
+{{- $s1 := .Get "src1" -}}
+{{- if $s1 -}}{{- $r := resources.Get $s1 -}}{{- if $r -}}
+  {{- $w := $r.Resize "900x webp q82" -}}
+  {{- $images = $images | append (dict "src" $w.RelPermalink "width" $w.Width "height" $w.Height "alt" (.Get "alt1" | default "")) -}}
+{{- end -}}{{- end -}}
+
+{{- $s2 := .Get "src2" -}}
+{{- if $s2 -}}{{- $r := resources.Get $s2 -}}{{- if $r -}}
+  {{- $w := $r.Resize "900x webp q82" -}}
+  {{- $images = $images | append (dict "src" $w.RelPermalink "width" $w.Width "height" $w.Height "alt" (.Get "alt2" | default "")) -}}
+{{- end -}}{{- end -}}
+
+{{- $s3 := .Get "src3" -}}
+{{- if $s3 -}}{{- $r := resources.Get $s3 -}}{{- if $r -}}
+  {{- $w := $r.Resize "900x webp q82" -}}
+  {{- $images = $images | append (dict "src" $w.RelPermalink "width" $w.Width "height" $w.Height "alt" (.Get "alt3" | default "")) -}}
+{{- end -}}{{- end -}}
+
+{{- $s4 := .Get "src4" -}}
+{{- if $s4 -}}{{- $r := resources.Get $s4 -}}{{- if $r -}}
+  {{- $w := $r.Resize "900x webp q82" -}}
+  {{- $images = $images | append (dict "src" $w.RelPermalink "width" $w.Width "height" $w.Height "alt" (.Get "alt4" | default "")) -}}
+{{- end -}}{{- end -}}
+
+{{- $count := len $images -}}
+{{- if gt $count 0 -}}
+<div class="photo-grid photo-grid--{{ $count }}">
+  {{- range $images -}}
+  <figure class="photo-grid__item">
+    <img src="{{ .src }}"
+         width="{{ .width }}"
+         height="{{ .height }}"
+         alt="{{ .alt | htmlEscape }}"
+         loading="lazy"
+         decoding="async">
+  </figure>
+  {{- end -}}
+</div>
+{{- end -}}
