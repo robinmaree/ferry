@@ -11,8 +11,10 @@
             </div>
           </div>
           <div class="header-right d-flex justify-content-end align-items-center">
-            <button type="button" class="header__hamburger d-lg-none btn border-0 p-2 ms-2" aria-label="Menu" id="menu-toggle">
-              <i class="fa fa-bars"></i>
+            <button type="button" class="hamburger d-lg-none" aria-label="Menu openen" id="menu-toggle" aria-expanded="false">
+              <span class="hamburger__bar"></span>
+              <span class="hamburger__bar"></span>
+              <span class="hamburger__bar"></span>
             </button>
             <div class="mean__menu-wrapper d-lg-block d-none" id="main-nav-wrapper">
               <div class="main-menu">
@@ -33,3 +35,18 @@
     </div>
   </div>
 </header>
+
+<div id="mobile-overlay" class="mobile-overlay" aria-hidden="true" role="dialog" aria-label="Navigatiemenu">
+  <nav class="mobile-overlay__nav" aria-label="Mobiel menu">
+    <ul>
+      <li><a href="{{ "bestemmingen/" | relLangURL }}"><span class="mobile-overlay__num">01</span>Bestemmingen</a></li>
+      <li><a href="{{ "schepen/" | relLangURL }}"><span class="mobile-overlay__num">02</span>Schepen</a></li>
+      <li><a href="{{ "rederijen/" | relLangURL }}"><span class="mobile-overlay__num">03</span>Rederijen</a></li>
+      <li><a href="{{ "blog/" | relLangURL }}"><span class="mobile-overlay__num">04</span>Blog</a></li>
+      <li><a href="{{ "over-ons/" | relLangURL }}"><span class="mobile-overlay__num">05</span>Over ons</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-overlay__footer">
+    <a href="{{ "bestemmingen/" | relLangURL }}" class="mobile-overlay__cta">Zoek een overtocht →</a>
+  </div>
+</div>

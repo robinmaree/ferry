@@ -1,16 +1,46 @@
 (function () {
   'use strict';
 
-  // Mobile menu toggle
+  // Full-screen mobile overlay
   var menuToggle = document.getElementById('menu-toggle');
-  var navWrapper = document.getElementById('main-nav-wrapper');
-  if (menuToggle && navWrapper) {
+  var mobileOverlay = document.getElementById('mobile-overlay');
+
+  if (menuToggle && mobileOverlay) {
+    var openMenu = function () {
+      mobileOverlay.classList.add('is-open');
+      mobileOverlay.setAttribute('aria-hidden', 'false');
+      menuToggle.classList.add('is-open');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      menuToggle.setAttribute('aria-label', 'Menu sluiten');
+      document.body.classList.add('menu-open');
+    };
+
+    var closeMenu = function () {
+      mobileOverlay.classList.remove('is-open');
+      mobileOverlay.setAttribute('aria-hidden', 'true');
+      menuToggle.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Menu openen');
+      document.body.classList.remove('menu-open');
+    };
+
     menuToggle.addEventListener('click', function () {
-      navWrapper.classList.toggle('mobile-open');
-      navWrapper.style.display = navWrapper.classList.contains('mobile-open') ? 'block' : '';
-      var icon = menuToggle.querySelector('i');
-      if (icon) {
-        icon.className = navWrapper.classList.contains('mobile-open') ? 'fa fa-times' : 'fa fa-bars';
+      if (mobileOverlay.classList.contains('is-open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // Close when a nav link is clicked
+    mobileOverlay.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && mobileOverlay.classList.contains('is-open')) {
+        closeMenu();
       }
     });
   }
